@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <title th:text="${student.id == null ? '添加学生' : '编辑学生'}"></title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h2 class="mb-4" th:text="${student.id == null ? '添加学生' : '编辑学生'}"></h2>
+
+    <div class="card">
+        <div class="card-body">
+            <form th:action="${student.id == null ? '/students' : '/students/' + student.id}" th:object="${student}" method="post">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="name" class="form-label">姓名 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                        <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">性别 <span class="text-danger">*</span></label>
+                        <div class="d-flex">
+                            <div class="form-check me-3">
+                                <input class="form-check-input" type="radio" id="gender-male" th:field="*{gender}" value="男" required>
+                                <label class="form-check-label" for="gender-male">男</label>
+                            </div>
+                            <div class="form-check me-3">
+                                <input class="form-check-input" type="radio" id="gender-female" th:field="*{gender}" value="女">
+                                <label class="form-check-label" for="gender-female">女</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" id="gender-other" th:field="*{gender}" value="其他">
+                                <label class="form-check-label" for="gender-other">其他</label>
+                            </div>
+                        </div>
+                        <div class="text-danger" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="phone" class="form-label">电话 <span class="text-danger">*</span></label>
+                        <input type="tel" class="form-control" id="phone" th:field="*{phone}" required>
+                        <div class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="age" class="form-label">年龄 <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" id="age" th:field="*{age}" min="1" max="120" required>
+                        <div class="text-danger" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="major" class="form-label">专业 <span class="text-danger">*</span></label>
+                        <select class="form-select" id="major" th:field="*{major}" required>
+                            <option value="">-- 选择专业 --</option>
+                            <option th:each="option : ${majorOptions}" th:value="${option}" th:text="${option}"></option>
+                        </select>
+                        <div class="text-danger" th:if="${#fields.hasErrors('major')}" th:errors="*{major}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="nativePlace" class="form-label">籍贯</label>
+                        <input type="text" class="form-control" id="nativePlace" th:field="*{nativePlace}">
+                        <div class="text-danger" th:if="${#fields.hasErrors('nativePlace')}" th:errors="*{nativePlace}"></div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="email" class="form-label">邮箱</label>
+                        <input type="email" class="form-control" id="email" th:field="*{email}">
+                        <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tag" class="form-label">标签</label>
+                        <input type="text" class="form-control" id="tag" th:field="*{tag}" placeholder="多个标签用逗号分隔">
+                        <div class="text-danger" th:if="${#fields.hasErrors('tag')}" th:errors="*{tag}"></div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="remark" class="form-label">备注</label>
+                    <textarea class="form-control" id="remark" th:field="*{remark}" rows="3"></textarea>
+                    <div class="text-danger" th:if="${#fields.hasErrors('remark')}" th:errors="*{remark}"></div>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a th:href="@{/students}" class="btn btn-secondary">返回列表</a>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

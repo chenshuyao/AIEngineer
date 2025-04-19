@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main}">
+<head>
+    <title>学生列表</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <h2 class="mb-4">学生列表</h2>
+
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <form th:action="@{/students}" method="get" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="搜索...">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" name="searchType">
+                        <option value="" th:selected="${searchType == null}">综合搜索</option>
+                        <option value="name" th:selected="${searchType == 'name'}">按姓名</option>
+                        <option value="phone" th:selected="${searchType == 'phone'}">按电话</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">搜索</button>
+                </div>
+                <input type="hidden" name="sortField" th:value="${sortField}">
+                <input type="hidden" name="sortDir" th:value="${sortDir}">
+                <input type="hidden" name="size" th:value="${size}">
+            </form>
+        </div>
+        <div class="col-md-4 text-end">
+            <a th:href="@{/students/new}" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> 添加学生
+            </a>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th>
+                    <a th:href="@{'/students?page=' + ${currentPage} + '&size=' + ${size} + '&sortField=id&sortDir=' + ${reverseSortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}">
+                        ID <i th:class="${sortField == 'id' ? (sortDir == 'asc' ? 'bi bi-arrow-up' : 'bi bi-arrow-down') : 'bi bi-arrow-down-up'}"></i>
+                    </a>
+                </th>
+                <th>
+                    <a th:href="@{'/students?page=' + ${currentPage} + '&size=' + ${size} + '&sortField=name&sortDir=' + ${reverseSortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}">
+                        姓名 <i th:class="${sortField == 'name' ? (sortDir == 'asc' ? 'bi bi-arrow-up' : 'bi bi-arrow-down') : 'bi bi-arrow-down-up'}"></i>
+                    </a>
+                </th>
+                <th>性别</th>
+                <th>电话</th>
+                <th>专业</th>
+                <th>邮箱</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="student : ${students}">
+                <td th:text="${student.id}"></td>
+                <td th:text="${student.name}"></td>
+                <td th:text="${student.gender}"></td>
+                <td th:text="${student.phone}"></td>
+                <td th:text="${student.major}"></td>
+                <td th:text="${student.email}"></td>
+                <td>
+                    <a th:href="@{/students/{id}(id=${student.id})}" class="btn btn-info btn-sm">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a th:href="@{/students/{id}/edit(id=${student.id})}" class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <a th:href="@{/students/{id}/delete(id=${student.id})}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('确定要删除这条记录吗？')">
+                        <i class="bi bi-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            <tr th:if="${students.empty}">
+                <td colspan="7" class="text-center">没有找到学生记录</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${totalPages > 1}" class="row">
+        <div class="col-md-6">
+            <div>
+                显示 <span th:text="${currentPage * size + 1}"></span> 到
+                <span th:text="${(currentPage * size) + students.size()}"></span> 条，共
+                <span th:text="${totalItems}"></span> 条记录
+            </div>
+        </div>
+        <div class="col-md-6">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/students?page=0&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}">首页</a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/students?page=' + ${currentPage - 1} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}">上一页</a>
+                    </li>
+                    <li class="page-item" th:each="i: ${#numbers.sequence(0, totalPages - 1)}"
+                        th:classappend="${i == currentPage ? 'active' : ''}"
+                        th:if="${i >= currentPage - 2 && i <= currentPage + 2}">
+                        <a class="page-link" th:href="@{'/students?page=' + ${i} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}"
+                           th:text="${i + 1}"></a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/students?page=' + ${currentPage + 1} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}">下一页</a>
+                    </li>
+                    <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{'/students?page=' + ${totalPages - 1} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}">末页</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+</body>
+</html>
