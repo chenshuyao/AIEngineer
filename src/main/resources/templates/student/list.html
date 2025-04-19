@@ -41,12 +41,12 @@
             <thead class="table-dark">
             <tr>
                 <th>
-                    <a th:href="@{'/students?page=' + ${currentPage} + '&size=' + ${size} + '&sortField=id&sortDir=' + ${reverseSortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}">
+                    <a th:href="@{/students(page=${currentPage},size=${size},sortField='id',sortDir=${reverseSortDir},keyword=${keyword != null ? keyword : null},searchType=${searchType != null ? searchType : null})}">
                         ID <i th:class="${sortField == 'id' ? (sortDir == 'asc' ? 'bi bi-arrow-up' : 'bi bi-arrow-down') : 'bi bi-arrow-down-up'}"></i>
                     </a>
                 </th>
                 <th>
-                    <a th:href="@{'/students?page=' + ${currentPage} + '&size=' + ${size} + '&sortField=name&sortDir=' + ${reverseSortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}">
+                    <a th:href="@{/students(page=${currentPage},size=${size},sortField='name',sortDir=${reverseSortDir},keyword=${keyword != null ? keyword : null},searchType=${searchType != null ? searchType : null})}">
                         姓名 <i th:class="${sortField == 'name' ? (sortDir == 'asc' ? 'bi bi-arrow-up' : 'bi bi-arrow-down') : 'bi bi-arrow-down-up'}"></i>
                     </a>
                 </th>
@@ -97,22 +97,22 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-end">
                     <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{'/students?page=0&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}">首页</a>
+                        <a class="page-link" th:href="@{/students(page=0,size=${size},sortField=${sortField},sortDir=${sortDir},keyword=${keyword != null ? keyword : null},searchType=${searchType != null ? searchType : null})}">首页</a>
                     </li>
                     <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{'/students?page=' + ${currentPage - 1} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}">上一页</a>
+                        <a class="page-link" th:href="@{/students(page=${currentPage - 1},size=${size},sortField=${sortField},sortDir=${sortDir},keyword=${keyword != null ? keyword : null},searchType=${searchType != null ? searchType : null})}">上一页</a>
                     </li>
                     <li class="page-item" th:each="i: ${#numbers.sequence(0, totalPages - 1)}"
                         th:classappend="${i == currentPage ? 'active' : ''}"
                         th:if="${i >= currentPage - 2 && i <= currentPage + 2}">
-                        <a class="page-link" th:href="@{'/students?page=' + ${i} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}"
+                        <a class="page-link" th:href="@{/students(page=${i},size=${size},sortField=${sortField},sortDir=${sortDir},keyword=${keyword != null ? keyword : null},searchType=${searchType != null ? searchType : null})}"
                            th:text="${i + 1}"></a>
                     </li>
                     <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{'/students?page=' + ${currentPage + 1} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}">下一页</a>
+                        <a class="page-link" th:href="@{/students(page=${currentPage + 1},size=${size},sortField=${sortField},sortDir=${sortDir},keyword=${keyword != null ? keyword : null},searchType=${searchType != null ? searchType : null})}">下一页</a>
                     </li>
                     <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{'/students?page=' + ${totalPages - 1} + '&size=' + ${size} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + (${keyword != null} ? '&keyword=' + ${keyword} : '') + (${searchType != null} ? '&searchType=' + ${searchType} : '')}">末页</a>
+                        <a class="page-link" th:href="@{/students(page=${totalPages - 1},size=${size},sortField=${sortField},sortDir=${sortDir},keyword=${keyword != null ? keyword : null},searchType=${searchType != null ? searchType : null})}">末页</a>
                     </li>
                 </ul>
             </nav>
